@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      Movement Coolio
+    </title>
+  </head>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+    }
+    #game{
+      width: 400px;
+      length: 500px;
+      border: 1px solid black;
+      margin: auto;
+    }
+    #character{
+      width: 20px;
+      lenght: 20px;
+      background-color: red;
+      border-radius: 50%;
+      position: relative;
+      top: 440px;
+      left: 190px;
+      z-index: 1000000;
+    }
+  </style>
+  <body>
+    <div id="game">
+      <div id="character">
+        
+      </div>
+    </div>
+    <script>
+      var character = document.getElementById("character")
+      var interval;
+      var both = 0;
+
+      function moveLeft() {
+        var left = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
+        character.style.left = left + 2 + "px"
+      }
+
+      function moveRight() {
+        var left = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
+        character.style.left = left - 2 + "px"
+      }
+
+      document.addEventListener("keydown", event => {
+        if (both === 0) {
+          both++
+          if (event.key === "ArrowLeft") {
+            interval = setInterval(moveLeft, 1);
+          }
+          if (event.key === "ArrowRight") {
+            interval = setInterval(moveRight, 1);
+          }
+        }
+      });
+
+      document.addEventListener("keyup"), event => {
+        clearInterval(interval);
+        both = 0;
+      });
+    </script>
+  </body>
+</html>
