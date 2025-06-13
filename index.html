@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+    }
+    .colored {
+      background-color: midnightblue;
+      color: white;
+  </style>
   <head>
     <title>
       Robbery Factory
@@ -7,20 +16,20 @@
   </head>
   <body>
     <p>
-      Money stolen: $<span id="moneystolen">0</span>
+      Money stolen: $<span id="stolenmoney">0</span>
     </p>
-    <button onclick="addMoney(5)">
-      Rob an defenseless person [$1-<span id="maxmoney">5</span>]
+    <button onclick="addMoney(5)" class="colored">
+      Rob a defenseless person [$1-<span id="maxmoney">5</span>]
     </button>
-    <button onclick="hireRobber(0)">
-      Hire a crappy robber [$<span id="crappyprice">5</span>] [$<span id="crappypersecond">2</span>/s]
+    <button onclick="hireRobber(0)" class="colored">
+      Hire a crappy robber [$<span id="crappyprice">5</span>] [$<span id="crappypersecond">2</span>/s] -- <span id="crappyrobbers">0</span>
     </button>
     <script>
-      var stolenmoney = 0;
-      var crappyrobbers = 0;
-      var maxmoney = 5;
-      var crappypersecond = 2;
-      var crappyprice = 5;
+      var stolenmoney = parseInt(getCookie("stolenmoney")) || 0;
+      var crappyrobbers = parseInt(getCookie("crappyrobbers")) || 0;
+      var maxmoney = parseInt(getCookie("maxmoney")) || 5;
+      var crappypersecond = parseInt(getCookie("crappypersecond")) || 2;
+      var crappyprice = parseInt(getCookie("crappyprice")) || 5;
 
       function addMoney(max) {
         stolenmoney = stolenmoney + Math.round(Math.random()*(max-1)+1)
@@ -32,14 +41,36 @@
           stolenmoney = stolenmoney - crappyprice
           crappyprice = Math.round(crappyprice*1.2)
           crappyrobbers = crappyrobbers + 1
-          document.getElementById("moneystolen").innerHTML = stolenmoney
+          document.getElementById("stolenmoney").innerHTML = stolenmoney
           document.getElementById("crappyprice").innerHTML = crappyprice
+          document.getElementById("crappyrobbers").innerHTML = crappyrobbers
         }
       }
 
+      function save(name, value) {
+        const expires = new Date(Date.now() + 7 * 864e5).toUTCString();
+        document.cookie = name + "=" + value + ";expires=" + expires + ";path=/movementcoolio";
+      }
+
+      function getCookie(name) {
+        const cookies = document.cookie.split("; ");
+        for (let c of cookies) {
+          if (c.startsWith(name + "=")) {
+            return c.substring(name.length + 1);
+          }
+        }
+        return "";
+      }
+
+      document.getElementById("stolenmoney").innerHTML = stolenmoney
+      document.getElementById("crappyprice").innerHTML = crappyprice
+      document.getElementById("crappyrobbers").innerHTML = crappyrobbers
+      document.getElementById("maxmoney").innerHTML = maxmoney
+      document.getElementById("crappyrobbers").innerHTML = crappyrobbers
+
       setInterval(function() {
         stolenmoney = stolenmoney + crappyrobbers*crappypersecond
-        document.getElementById("moneystolen").innerHTML = stolenmoney
+        document.getElementById("stolenmoney").innerHTML = stolenmoney
       }, 1000)
     </script>
   </body>
