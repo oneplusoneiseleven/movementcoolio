@@ -1,70 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8">
     <title>
-      Movement Coolio
+      Robbery Factory
     </title>
   </head>
-  <style>
-    *{
-      padding: 0;
-      margin: 0;
-    }
-    #game{
-      width: 400px;
-      length: 500px;
-      border: 1px solid black;
-      margin: auto;
-    }
-    #character{
-      width: 20px;
-      lenght: 20px;
-      background-color: red;
-      border-radius: 50%;
-      position: relative;
-      top: 440px;
-      left: 190px;
-      z-index: 1000000;
-    }
-  </style>
   <body>
-    <div id="game">
-      <div id="character">
-        
-      </div>
-    </div>
+    <p>
+      Money stolen: $<span id="moneystolen">0</span>
+    </p>
+    <button onclick="addMoney(5)">
+      Rob an defenseless person [$1-<span id="maxmoney">5</span>]
+    </button>
+    <button onclick="hireRobber(0)">
+      Hire a crappy robber [$<span id="crappyprice">5</span>] [$<span id="crappypersecond">2</span>/s]
+    </button>
     <script>
-      var character = document.getElementById("character")
-      var interval;
-      var both = 0;
+      var stolenmoney = 0;
+      var crappyrobbers = 0;
+      var maxmoney = 5;
+      var crappypersecond = 2;
+      var crappyprice = 5;
 
-      function moveLeft() {
-        var left = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
-        character.style.left = left + 2 + "px"
+      function addMoney(max) {
+        stolenmoney = stolenmoney + Math.round(Math.random()*(max-1)+1)
+        document.getElementById("moneystolen").innerHTML = stolenmoney
       }
 
-      function moveRight() {
-        var left = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
-        character.style.left = left - 2 + "px"
-      }
-
-      document.addEventListener("keydown", event => {
-        if (both === 0) {
-          both++
-          if (event.key === "ArrowLeft") {
-            interval = setInterval(moveLeft, 1);
-          }
-          if (event.key === "ArrowRight") {
-            interval = setInterval(moveRight, 1);
-          }
+      function hireRobber(robberid) {
+        if (robberid === 0 && stolenmoney >= crappyprice) {
+          stolenmoney = stolenmoney - crappyprice
+          crappyprice = Math.round(crappyprice*1.2)
+          crappyrobbers = crappyrobbers + 1
+          document.getElementById("moneystolen").innerHTML = stolenmoney
+          document.getElementById("crappyprice").innerHTML = crappyprice
         }
-      });
+      }
 
-      document.addEventListener("keyup", event => {
-        clearInterval(interval);
-        both = 0;
-      });
+      setInterval(function() {
+        stolenmoney = stolenmoney + crappyrobbers*crappypersecond
+        document.getElementById("moneystolen").innerHTML = stolenmoney
+      }, 1000)
     </script>
   </body>
 </html>
